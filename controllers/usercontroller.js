@@ -1,5 +1,6 @@
 import models from '../models'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 const userController = {};
 
@@ -70,8 +71,9 @@ userController.login = (req, res) => {
             const hash = bcrypt.hashSync(password, person.salt);
             if (hash === person.hash) {
                 res.status(200).json({
-                    message: "Success"
-                    //add jwt here
+                    id: person._id,
+                    message: "Success",
+                    jwt: jwt.sign(person._id.toString(), 'secret key')
                 });
             } else {
                 res.status(422).json({
